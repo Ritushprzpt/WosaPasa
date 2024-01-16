@@ -1,0 +1,45 @@
+<?php 
+session_start();
+    require_once './config/dbconfig.php';
+    require_once './config/utility.php';
+    require './auth_user.php';
+    if($_POST){
+        $title = $_REQUEST['title'];
+        $msg = $_REQUEST['message'];
+        $user_id = $_REQUEST['user_id'];
+        // echo $title;
+        // echo $msg;
+        // echo $user_id;
+        // die();
+
+        $q_insert_feedback = "INSERT INTO feedbacks (title,message,user_id) value ('$title','$msg','$user_id')";
+        if(mysqli_query($conn,$q_insert_feedback)){
+            echo "<div class='server_success'>Feedback has been submited</div>";
+            header("refresh:2;url=myfeedback.php");
+        }else{
+            echo "<div class='server_success'>fail to submit the feedback</div>";
+            header("refresh:2;url=myfeedback.php");
+        }
+
+    }
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php require_once 'assets/component/head.php' ?>
+    <title>Feedback</title>
+</head>
+<body>
+    <?php require_once 'assets/component/topnav.php' ?>
+    <div class="container">
+        <h1 class="header">Feedback</h1>
+        <form action="" method="post" class="feedback_form" >
+            <input name="user_id" type="hidden" value="<?= $_SESSION['id'] ?>"><br>
+            <input class="feedback_input" name="title" type="text" placeholder="Title/Issue"><br>
+            <textarea class="feedback_textarea" name="message" id="" placeholder = "Describe Message"></textarea><br>
+            <input class="btn" type="submit" value="Send Feedback">
+            <input class="btn" type="button" value="Cancel" onclick="window.location.href='/myfeedback.php'">
+        </form>
+    </div>
+</body>
+</html>
